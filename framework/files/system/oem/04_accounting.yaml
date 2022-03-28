@@ -1,9 +1,7 @@
 name: "Default user"
 stages:
   initramfs:
-  - if: |
-          cat /proc/cmdline | grep -q "CDLABEL"
-    name: "Setup user for live CD"
+  - name: "Setup user for live CD"
     files:
     - path: /etc/issue.d/99_passwd
       content: |
