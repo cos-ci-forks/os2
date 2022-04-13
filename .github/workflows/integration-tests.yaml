@@ -13,8 +13,7 @@ env:
 jobs:
   build:
 
-    runs-on: ubuntu-latest
-    #runs-on: self-hosted
+    runs-on: build-host
     steps:
       - uses: actions/checkout@v2
       -

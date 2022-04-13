@@ -6,7 +6,7 @@ concurrency:
   cancel-in-progress: true
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: build-host
     env:
       REPO: quay.io/costoolkit/os2
     steps:
