@@ -3,7 +3,8 @@ REPO?=quay.io/costoolkit/os2
 TAG?=dev
 IMAGE=${REPO}:${TAG}
 ROOT_DIR:=$(shell dirname $(realpath $(lastword $(MAKEFILE_LIST))))
-
+SUDO?=sudo
+FRAMEWORK_PACKAGES?=meta/cos-light
 .dapper:
 	@echo Downloading dapper
 	@curl -sL https://releases.rancher.com/dapper/latest/dapper-$$(uname -s)-$$(uname -m) > .dapper.tmp
@@ -108,3 +109,12 @@ deps:
 
 integration-tests: 
 	$(MAKE) -C tests/ integration-tests
+
+_FW_CMD=apk add curl && ( curl -L https://raw.githubusercontent.com/rancher-sandbox/cOS-toolkit/master/scripts/get_luet.sh | sh ) && luet install --system-target /framework -y $(FRAMEWORK_PACKAGES) && rm -rf /framework/var/luet
+update-cos-framework:
+	@echo "Cleanup generated files"
+	$(SUDO) rm -rf $(ROOT_DIR)/framework/cos
+	docker run --rm --entrypoint /bin/sh \
+		-v $(ROOT_DIR)/framework/cos:/framework \
+		alpine -c \
+		"$(_FW_CMD)"
